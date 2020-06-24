@@ -1,56 +1,60 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <div class="d-flex align-center">
-        <v-img
-          alt="Vuetify Logo"
-          class="shrink mr-2"
-          contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-          transition="scale-transition"
-          width="40"
-        />
+    <NavBar />
+    <v-main class="grey lighten-5">
+      <router-view @make-dialog="makeDialog" />
+    </v-main>
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
-      </div>
-
-      <v-spacer></v-spacer>
-
-      <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-        text
-      >
-        <span class="mr-2">Latest Release</span>
-        <v-icon>mdi-open-in-new</v-icon>
-      </v-btn>
-    </v-app-bar>
-
-    <v-content>
-      <HelloWorld />
-    </v-content>
+    <v-dialog v-model="dialog" max-width="500">
+      <v-card>
+        <v-card-title class="headline">{{ dialogTitle }}</v-card-title>
+        <v-card-text>{{ dialogContent }}</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="primary darken-1" text @click="dialog = false">
+            确定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld";
+import NavBar from "./components/NavBar";
 
 export default {
   name: "App",
-
-  components: {
-    HelloWorld
+  components: { NavBar },
+  created: function() {
+    if (localStorage.getItem("username")) {
+      this.$store.commit("loadInfo");
+      this.loadUserInfo();
+    }
   },
-
+  methods: {
+    loadUserInfo: function() {
+      this.axios
+        .get("user/")
+        .then(response => {
+          this.$store.commit("setUser", response.data);
+        })
+        .catch(error => {
+          this.makeDialog("错误", error);
+          this.$store.commit("logout");
+        });
+    },
+    makeDialog: function(title, content) {
+      this.dialogTitle = title;
+      this.dialogContent = content;
+      this.dialog = true;
+    }
+  },
   data: () => ({
-    //
+    dialog: false,
+    dialogColor: "primary",
+    dialogTitle: "",
+    dialogContent: ""
   })
 };
 </script>

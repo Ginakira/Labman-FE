@@ -17,7 +17,8 @@
             </h1>
             <blockquote class="blockquote">
               <v-icon dark>mdi-format-quote-open</v-icon>
-              Stay hungry, stay foolish. (Steve Jobs)
+              {{ quoteText }}
+              <small class="ml-4">{{ quoteAuthor }}</small>
               <v-icon dark>mdi-format-quote-close</v-icon>
             </blockquote>
           </v-col>
@@ -108,10 +109,13 @@ export default {
       "red lighten-1",
       "red",
       "red darken-2"
-    ]
+    ],
+    quoteText: "",
+    quoteAuthor: ""
   }),
   created: function() {
     this.getNotices();
+    this.getQuote();
   },
   methods: {
     showDialog: function(index) {
@@ -143,6 +147,17 @@ export default {
         })
         .catch(error => {
           this.$emit("make-dialog", "获取公告出错", error.response.data.detail);
+        });
+    },
+    getQuote: function() {
+      this.axios
+        .get("quote/")
+        .then(response => {
+          this.quoteText = response.data.text;
+          this.quoteAuthor = response.data.author;
+        })
+        .catch(error => {
+          this.$emit("make-dialog", "获取语料出错", error);
         });
     }
   }

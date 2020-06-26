@@ -4,7 +4,6 @@
     <v-main class="grey lighten-5">
       <router-view @make-dialog="makeDialog" />
     </v-main>
-
     <v-dialog v-model="dialog" max-width="500">
       <v-card>
         <v-card-title class="headline">{{ dialogTitle }}</v-card-title>
@@ -26,6 +25,12 @@ import NavBar from "./components/NavBar";
 export default {
   name: "App",
   components: { NavBar },
+  data: () => ({
+    dialog: false,
+    dialogColor: "primary",
+    dialogTitle: "",
+    dialogContent: ""
+  }),
   created: function() {
     if (localStorage.getItem("username")) {
       this.$store.commit("loadInfo");
@@ -49,12 +54,6 @@ export default {
       this.dialogContent = content;
       this.dialog = true;
     }
-  },
-  data: () => ({
-    dialog: false,
-    dialogColor: "primary",
-    dialogTitle: "",
-    dialogContent: ""
-  })
+  }
 };
 </script>

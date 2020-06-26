@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app color="primary" dark>
+  <v-app-bar app color="primary" dark fixed>
     <div class="d-flex align-center">
       <h1>{{ brandText }}</h1>
     </div>
@@ -10,6 +10,9 @@
 
     <v-spacer></v-spacer>
 
+    <v-btn v-if="$store.state.is_staff" text to="/console">
+      <v-icon class="mr-2">{{ consoleIcon }}</v-icon> {{ consolePageText }}
+    </v-btn>
     <v-menu
       offset-y
       open-on-hover
@@ -17,7 +20,7 @@
       min-width="150px"
     >
       <template v-slot:activator="{ on, attrs }">
-        <v-btn v-bind="attrs" v-on="on" text>
+        <v-btn v-bind="attrs" text v-on="on">
           <span v-if="$store.state.logged">
             <v-icon>{{ loggedIcon }}</v-icon> {{ $store.state.username }}
           </span>
@@ -56,9 +59,11 @@ export default {
     brandText: "Labman",
     homePageText: "Home",
     aboutPageText: "About",
+    consolePageText: "控制台",
     loginText: "登录",
     registerText: "注册",
     logoutText: "注销",
+    consoleIcon: "mdi-console",
     loggedIcon: "mdi-account-check",
     loginIcon: "mdi-account-arrow-left",
     logoutIcon: "mdi-logout",

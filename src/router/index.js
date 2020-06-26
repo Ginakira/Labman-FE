@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
+import store from "../store/index";
 
 Vue.use(VueRouter);
 
@@ -10,7 +11,7 @@ const routes = [
     name: "Home",
     component: Home,
     meta: {
-      title: "Labman"
+      title: "首页"
     }
   },
   {
@@ -32,7 +33,7 @@ const routes = [
       title: "登录"
     },
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Login.vue")
+      import(/* webpackChunkName: "login" */ "../views/Login.vue")
   },
   {
     path: "/logout",
@@ -41,7 +42,7 @@ const routes = [
       title: "注销"
     },
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Logout.vue")
+      import(/* webpackChunkName: "logout" */ "../views/Logout.vue")
   },
   {
     path: "/register",
@@ -50,7 +51,46 @@ const routes = [
       title: "注册"
     },
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Register.vue")
+      import(/* webpackChunkName: "register" */ "../views/Register.vue")
+  },
+  {
+    path: "/console",
+    name: "Console",
+    meta: {
+      title: "控制台",
+      needAuth: true,
+      needStaff: true
+    },
+    component: () =>
+      import(/* webpackChunkName: "console" */ "../views/console/Console.vue"),
+    children: [
+      {
+        path: "dashboard",
+        name: "Dashboard",
+        meta: {
+          title: "控制台 - 总览",
+          needAuth: true,
+          needStaff: true
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "console-dashboard" */ "../views/console/Dashboard.vue"
+          )
+      },
+      {
+        path: "notices",
+        name: "Notices",
+        meta: {
+          title: "控制台 - 公告管理",
+          needAuth: true,
+          needStaff: true
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "console-notices" */ "../views/console/Notices.vue"
+          )
+      }
+    ]
   }
 ];
 
@@ -62,7 +102,17 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.title) {
-    document.title = to.meta.title + " | AutoWA Studio";
+    document.title = to.meta.title + " | Labman";
+  }
+  // 需要登录才可访问的页面
+  if (to.meta.needAuth && !store.state.logged) {
+    next("/login");
+    return;
+  }
+  // 需要管理员权限可访问的页面
+  if (to.meta.needStaff && (!store.state.logged || !store.state.is_staff)) {
+    next("/");
+    return;
   }
   next();
 });

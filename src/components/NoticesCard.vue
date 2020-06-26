@@ -15,9 +15,9 @@
                 <v-list-item-title>
                   {{ notice.title }}
                   <v-icon
+                    v-if="notice.priority > 1"
                     small
                     :color="alertIconColor[notice.priority]"
-                    v-if="notice.priority"
                   >
                     mdi-alert-circle
                   </v-icon>
@@ -72,11 +72,11 @@ export default {
     alertIconColor: [
       // 公告优先级标识
       "",
+      "",
       "yellow darken-3",
       "yellow darken-4",
       "red lighten-1",
-      "red",
-      "red darken-2"
+      "red"
     ]
   }),
   created: function() {

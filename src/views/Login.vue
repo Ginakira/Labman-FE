@@ -26,10 +26,10 @@
                     :rules="passwordRules"
                     type="password"
                     prepend-inner-icon="mdi-key"
-                    @keyup.enter="submitForm"
                     required
                     outlined
                     dense
+                    @keyup.enter="submitForm"
                   ></v-text-field>
                 </v-form>
               </v-col>
@@ -37,14 +37,14 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="resetForm" text>
+            <v-btn text @click="resetForm">
               {{ resetButtonText }}
             </v-btn>
             <v-btn
-              @click="submitForm"
               :disabled="!formValid"
               color="success"
               text
+              @click="submitForm"
             >
               {{ submitButtonText }}
             </v-btn>

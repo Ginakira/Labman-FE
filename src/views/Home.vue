@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div id="home-page">
     <v-parallax
       dark
       src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg"

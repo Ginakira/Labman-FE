@@ -56,10 +56,11 @@ const routes = [
   {
     path: "/console",
     name: "Console",
+    // redirect: "console/dashboard",
     meta: {
       title: "控制台",
-      needAuth: true,
-      needStaff: true
+      requireAuth: true,
+      requireStaff: true
     },
     component: () =>
       import(/* webpackChunkName: "console" */ "../views/console/Console.vue"),
@@ -69,8 +70,8 @@ const routes = [
         name: "Dashboard",
         meta: {
           title: "控制台 - 总览",
-          needAuth: true,
-          needStaff: true
+          requireAuth: true,
+          requireStaff: true
         },
         component: () =>
           import(
@@ -82,8 +83,8 @@ const routes = [
         name: "Notices",
         meta: {
           title: "控制台 - 公告管理",
-          needAuth: true,
-          needStaff: true
+          requireAuth: true,
+          requireStaff: true
         },
         component: () =>
           import(
@@ -105,12 +106,12 @@ router.beforeEach((to, from, next) => {
     document.title = to.meta.title + " | Labman";
   }
   // 需要登录才可访问的页面
-  if (to.meta.needAuth && !store.state.logged) {
+  if (to.meta.requireAuth && !store.state.logged) {
     next("/login");
     return;
   }
   // 需要管理员权限可访问的页面
-  if (to.meta.needStaff && (!store.state.logged || !store.state.is_staff)) {
+  if (to.meta.requireStaff && (!store.state.logged || !store.state.is_staff)) {
     next("/");
     return;
   }

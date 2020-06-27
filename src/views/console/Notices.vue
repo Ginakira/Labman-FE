@@ -204,6 +204,11 @@ export default {
         this.axios
           .put("notice/" + notice.id + "/", this.editedItem)
           .then(() => {
+            this.$store.commit({
+              type: "makeToast",
+              text: "修改成功",
+              color: "success"
+            });
             this.getNotices();
           })
           .catch(error => {
@@ -214,9 +219,15 @@ export default {
             });
           });
       } else {
+        // 新建公告
         this.axios
           .post("notices/", this.editedItem)
           .then(() => {
+            this.$store.commit({
+              type: "makeToast",
+              text: "发布成功",
+              color: "success"
+            });
             this.getNotices();
           })
           .catch(error => {

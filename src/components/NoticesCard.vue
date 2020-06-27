@@ -111,7 +111,11 @@ export default {
           this.notices = response.data;
         })
         .catch(error => {
-          this.$emit("make-dialog", "获取公告出错", error.response.data.detail);
+          this.$store.commit({
+            type: "makeToast",
+            text: "获取公告出错：" + error.response.data.detail,
+            color: "error"
+          });
         });
     }
   }

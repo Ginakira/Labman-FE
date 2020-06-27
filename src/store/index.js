@@ -8,7 +8,11 @@ export default new Vuex.Store({
     logged: false,
     username: "",
     is_staff: false,
-    is_superuser: false
+    is_superuser: false,
+    // Toast
+    toastVisible: false,
+    toastText: "",
+    toastType: "info"
   },
   mutations: {
     setUser(state, user) {
@@ -32,6 +36,14 @@ export default new Vuex.Store({
       state.is_staff = false;
       state.is_superuser = false;
       localStorage.clear();
+    },
+    makeToast(state, payload) {
+      state.toastVisible = true;
+      state.toastText = payload.text;
+      state.toastType = payload.color;
+    },
+    setToastVisible(state, isVisible) {
+      state.toastVisible = isVisible;
     }
   },
   actions: {},

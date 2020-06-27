@@ -56,7 +56,7 @@ const routes = [
   {
     path: "/console",
     name: "Console",
-    // redirect: "console/dashboard",
+    redirect: "console/dashboard",
     meta: {
       title: "控制台",
       requireAuth: true,

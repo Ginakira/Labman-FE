@@ -16,6 +16,18 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-snackbar v-model="toastVisible" timeout="2000" top :color="toastType">
+      <v-icon v-if="toastType === 'success'" left>
+        mdi-check-circle-outline
+      </v-icon>
+      <v-icon v-if="toastType === 'info'" left>
+        mdi-alert-circle-outline
+      </v-icon>
+      <v-icon v-if="toastType === 'error'" left>
+        mdi-close-circle-outline
+      </v-icon>
+      {{ toastText }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -31,6 +43,22 @@ export default {
     dialogTitle: "",
     dialogContent: ""
   }),
+  computed: {
+    toastVisible: {
+      get() {
+        return this.$store.state.toastVisible;
+      },
+      set(value) {
+        this.$store.commit("setToastVisible", value);
+      }
+    },
+    toastText() {
+      return this.$store.state.toastText;
+    },
+    toastType() {
+      return this.$store.state.toastType;
+    }
+  },
   created: function() {
     if (localStorage.getItem("username")) {
       this.$store.commit("loadInfo");
@@ -45,7 +73,11 @@ export default {
           this.$store.commit("setUser", response.data);
         })
         .catch(error => {
-          this.makeDialog("错误", error);
+          this.$store.commit({
+            type: "makeToast",
+            text: error,
+            color: "error"
+          });
           this.$store.commit("logout");
         });
     },

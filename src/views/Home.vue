@@ -9,7 +9,10 @@
           <v-col>
             <h1 class="display-1 font-weight-light">
               <span v-if="$store.state.logged">
-                欢迎回来 {{ $store.state.username }}
+                欢迎回来
+                <span class="text-capitalize">
+                  {{ $store.state.username }}
+                </span>
               </span>
               <span v-else>
                 Labman - More intelligent online team management system
@@ -48,7 +51,7 @@ export default {
   name: "Home",
   components: { NoticesCard },
   data: () => ({
-    quoteText: "",
+    quoteText: "苦思冥想中...",
     quoteAuthor: ""
   }),
   created: function() {
@@ -63,7 +66,11 @@ export default {
           this.quoteAuthor = response.data.author;
         })
         .catch(error => {
-          this.$emit("make-dialog", "获取语料出错", error);
+          this.$store.commit({
+            type: "makeToast",
+            text: "获取语料出错：" + error,
+            color: "error"
+          });
         });
     }
   }

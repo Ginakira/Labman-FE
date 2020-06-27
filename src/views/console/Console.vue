@@ -74,17 +74,10 @@ export default {
         title: "公告管理",
         icon: "mdi-bulletin-board",
         router: "/console/notices"
-      },
-      {
-        title: "公告管理3",
-        icon: "mdi-bulletin-board",
-        router: "/console/foobar"
       }
     ]
   }),
-  created: function() {
-    // this.$router.push("/console/dashboard");
-  }
+  created: function() {}
 };
 </script>
 

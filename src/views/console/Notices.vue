@@ -163,7 +163,11 @@ export default {
           this.notices = response.data;
         })
         .catch(error => {
-          this.$emit("make-dialog", "获取公告出错", error.response.data.detail);
+          this.$store.commit({
+            type: "makeToast",
+            text: "获取公告出错" + error,
+            color: "error"
+          });
         });
     },
     createNotice: function() {
@@ -185,7 +189,11 @@ export default {
           this.getNotices();
         })
         .catch(error => {
-          this.$emit("make-dialog", "删除失败", error);
+          this.$store.commit({
+            type: "makeToast",
+            text: "删除失败" + error,
+            color: "error"
+          });
         });
     },
     saveNotice: function() {
@@ -199,7 +207,11 @@ export default {
             this.getNotices();
           })
           .catch(error => {
-            this.$emit("make-dialog", "更新失败", error);
+            this.$store.commit({
+              type: "makeToast",
+              text: "更新失败" + error,
+              color: "error"
+            });
           });
       } else {
         this.axios
@@ -208,7 +220,11 @@ export default {
             this.getNotices();
           })
           .catch(error => {
-            this.$emit("make-dialog", "新建失败", error);
+            this.$store.commit({
+              type: "makeToast",
+              text: "新建失败" + error,
+              color: "error"
+            });
           });
       }
       this.close();

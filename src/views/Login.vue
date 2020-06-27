@@ -82,11 +82,11 @@ export default {
           this.$store.commit("setUser", response.data);
         })
         .catch(error => {
-          this.$emit(
-            "make-dialog",
-            "获取用户信息失败",
-            error.response.data.detail
-          );
+          this.$store.commit({
+            type: "makeToast",
+            text: "获取用户信息出错" + error,
+            color: "error"
+          });
         });
     },
     resetForm: function() {
@@ -97,11 +97,20 @@ export default {
       this.axios
         .post("login/", this.loginForm)
         .then(() => {
+          this.$store.commit({
+            type: "makeToast",
+            text: "登录成功",
+            color: "success"
+          });
           this.loadUserInfo();
           this.$router.push("/");
         })
         .catch(error => {
-          this.$emit("make-dialog", "登录失败", error.response.data.detail);
+          this.$store.commit({
+            type: "makeToast",
+            text: "登录失败：" + error.response.data.detail,
+            color: "error"
+          });
         })
         .finally(() => {
           this.logging = false;

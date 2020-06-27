@@ -52,14 +52,14 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn @click="resetForm" text>
+            <v-btn text @click="resetForm">
               {{ resetButtonText }}
             </v-btn>
             <v-btn
-              @click="submitForm"
               :disabled="!formValid"
               color="success"
               text
+              @click="submitForm"
             >
               {{ submitButtonText }}
             </v-btn>
@@ -106,11 +106,19 @@ export default {
       this.axios
         .post("register/", this.registerForm)
         .then(() => {
-          this.$emit("make-dialog", "注册成功", "即将转到登录页面");
+          this.$store.commit({
+            type: "makeToast",
+            text: "注册成功，即将转到登录页面",
+            color: "success"
+          });
           this.$router.push("/login");
         })
         .catch(error => {
-          this.$emit("make-dialog", "注册失败", error.response.data.detail);
+          this.$store.commit({
+            type: "makeToast",
+            text: "注册失败" + error.response.data.detail,
+            color: "error"
+          });
         })
         .finally(() => {
           this.registering = false;
